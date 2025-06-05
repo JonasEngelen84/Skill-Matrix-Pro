@@ -6,7 +6,9 @@
     /// </summary>
     public class SkillLevel
     {
-        public int Value { get; }
+        public int Value { get; private set; }
+
+        private SkillLevel() { }
 
         public SkillLevel(int value)
         {
