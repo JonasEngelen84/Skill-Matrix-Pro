@@ -12,7 +12,7 @@ using SkillMatrixPro.Infrastructure;
 namespace SkillMatrixPro.Infrastructure.Migrations
 {
     [DbContext(typeof(SkmProDbContext))]
-    [Migration("20250605233243_InitialCreate")]
+    [Migration("20250606001326_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

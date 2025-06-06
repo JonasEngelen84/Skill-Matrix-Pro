@@ -1,38 +1,20 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore.Design;
 
 namespace SkillMatrixPro.Infrastructure
 {
     public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<SkmProDbContext>
     {
+        /// <inheritdoc />
         public SkmProDbContext CreateDbContext(string[] args)
         {
-            Console.WriteLine("CurrentDirectory: " + Directory.GetCurrentDirectory());
+            // Basisverzeichnis der ASP.NET Core-Anwendung (für Zugriff auf appsettings.json)
+            var basePath = Path.GetFullPath(Path.Combine(
+            AppContext.BaseDirectory,
+            "..\\..\\..\\..\\SkillMatrixPro.Web"));
 
-            // Ermittle den absoluten Pfad zur Web-Projektmappe
-            var basePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\..\\SkillMatrixPro.Web"));
+            var options = DbContextConfigurationHelper.BuildOptions(basePath);
 
-            Console.WriteLine($"[DesignTimeDbContextFactory] BasePath: {basePath}");
-
-            if (!File.Exists(Path.Combine(basePath, "appsettings.json")))
-            {
-                throw new FileNotFoundException("appsettings.json wurde nicht gefunden im Pfad: " + basePath);
-            }
-
-            var configuration = new ConfigurationBuilder()
-                .SetBasePath(basePath)
-                .AddJsonFile("appsettings.json", optional: false)
-                .Build();
-
-            var optionsBuilder = new DbContextOptionsBuilder<SkmProDbContext>();
-            var connString = configuration.GetConnectionString("DefaultConnection");
-
-            Console.WriteLine($"[DesignTimeDbContextFactory] ConnectionString: {connString}");
-
-            optionsBuilder.UseSqlServer(connString);
-
-            return new SkmProDbContext(optionsBuilder.Options);
+            return new SkmProDbContext(options);
         }
     }
 }
