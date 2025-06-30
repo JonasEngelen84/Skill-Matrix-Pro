@@ -18,6 +18,9 @@ namespace SkillMatrixPro.Infrastructure
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(SkmProDbContext).Assembly);
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<EmployeeSkillTarget>()
+                .HasKey(x => new { x.EmployeeId, x.SkillId });
+
             modelBuilder.Entity<EmployeeSkill>(es =>
             {
                 es.HasKey(e => new { e.EmployeeId, e.SkillId });
@@ -28,7 +31,7 @@ namespace SkillMatrixPro.Infrastructure
                     .OnDelete(DeleteBehavior.Cascade);
 
                 es.HasOne(e => e.Skill)
-                    .WithMany(s => s.EmployeeSkills)
+                    .WithMany(s => s.Employees)
                     .HasForeignKey(e => e.SkillId)
                     .OnDelete(DeleteBehavior.Cascade);
 
